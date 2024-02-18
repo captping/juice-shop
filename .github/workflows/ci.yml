@@ -16,7 +16,7 @@ jobs:
       - name: Set Up Node.js and Angular CLI
         uses: actions/setup-node@v2
         with:
-          node-version: 'node'  # Use 'node' to specify the latest version installed
+          node-version: '14'  # Replace with the version you want to use
 
       - name: Install Angular CLI
         run: npm install -g @angular/cli
@@ -45,4 +45,9 @@ jobs:
         run: |
           wget https://dl.bintray.com/jeremy-long/owasp/dependency-check-6.0.0-release.zip
           unzip -q dependency-check-6.0.0-release.zip
-          rm depende
+          rm dependency-check-6.0.0-release.zip
+
+      - name: Run OWASP Dependency-Check
+        run: |
+          cd dependency-check/bin
+          ./dependency-check.sh -s .
