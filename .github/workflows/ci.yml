@@ -1,4 +1,4 @@
-name: Run Unit Tests
+name: Run Unit Tests and OWASP Dependency-Check
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
       - name: Set Up Node.js and Angular CLI
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: 'node'  # Use 'node' to specify the latest version installed
 
       - name: Install Angular CLI
         run: npm install -g @angular/cli
@@ -26,3 +26,23 @@ jobs:
 
       - name: Run Unit Tests
         run: npm test
+
+  dependency-check:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set Up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: Download Dependency-Check CLI
+        run: |
+          wget https://dl.bintray.com/jeremy-long/owasp/dependency-check-6.0.0-release.zip
+          unzip -q dependency-check-6.0.0-release.zip
+          rm depende
