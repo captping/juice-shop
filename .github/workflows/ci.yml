@@ -41,13 +41,19 @@ jobs:
           distribution: 'adopt'
           java-version: '11'
 
-      - name: Download Dependency-Check CLI
+      - name: Download OWASP Dependency-Check
         run: |
-          wget https://dl.bintray.com/jeremy-long/owasp/dependency-check-6.0.0-release.zip
-          unzip -q dependency-check-6.0.0-release.zip
-          rm dependency-check-6.0.0-release.zip
+          curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/latest/download/dependency-check-6.0.0-release.zip
+          unzip -q dependency-check.zip
+          rm dependency-check.zip
 
       - name: Run OWASP Dependency-Check
         run: |
           cd dependency-check/bin
-          ./dependency-check.sh -s .
+          ./dependency-check.sh --format HTML -s . -f HTML -o /github/workspace/reports/
+
+      - name: Upload Dependency-Check Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: dependency-check-report
+          path: /github/workspace/reports/
